@@ -9,6 +9,9 @@ export default function Home() {
       <button onClick={() => navigate("/login")}>
         Go to Login
       </button>
+        <button onClick={() => navigate("/create-post")}>
+        Creat post
+       </button>
     </div>
   );
 }

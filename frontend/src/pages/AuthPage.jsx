@@ -1,4 +1,4 @@
-// src/pages/AuthPage.jsx
+
 import React, { useState } from 'react';
 import SignIn from '../components/SignIn';
 import SignUp from '../components/SignUp';

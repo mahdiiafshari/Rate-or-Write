@@ -7,7 +7,7 @@ router.register(r'study-post-likes', PostLikeViewSet, basename='study-post-like'
 urlpatterns = [
     path('categories/', CategoryListCreateView.as_view(), name='category-list-create'),
     path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
-    path('posts/', PostListCreateView.as_view(), name='post-list-create'),
-    path('posts/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
+    path('', PostListCreateView.as_view(), name='post-list-create'),
+    path('/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('/' , include(router.urls)),
 ]
