@@ -43,7 +43,7 @@ function SignUp({ onSwitch }) {
       }
 
       const response = await axios.post(
-        'http://localhost:8000/api/register/', // your actual endpoint
+        'http://localhost:8000/api/users/register/',
         formData,
         {
           headers: {

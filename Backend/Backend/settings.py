@@ -36,9 +36,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'users',  # Custom user app
+    'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
+    'users',  # Custom user app
+    'post'
 ]
 
 MIDDLEWARE = [
@@ -125,7 +127,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 #Cors setting
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    "http://localhost:5174",
 ]
 #JWT authentication
 SIMPLE_JWT = {
@@ -138,4 +140,5 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
