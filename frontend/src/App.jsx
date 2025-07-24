@@ -5,13 +5,14 @@ import PostList from './components/PostList';
 import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
 import Home from './pages/index.jsx';
+import Header from './components/Header';
 function App() {
   return(
   <Router>
+      <Header/>
       <Routes>
-        <Route path= '/' element={<Home/>}/>
+        <Route path= '/' element={<PostList />}/>
         <Route path="/login" element={<AuthPage />} />
-          <Route path="/posts" element={<PostList />} />
         <Route path="/create-post" element={<PostForm />} />
         <Route path="/:id" element={<PostDetail />} />
       </Routes>

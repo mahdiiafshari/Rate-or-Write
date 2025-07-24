@@ -14,7 +14,7 @@ export default function PostList() {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-2">All Posts</h1>
-      <Link to="/create" className="text-blue-500">+ New Post</Link>
+      <Link to="/create-post" className="text-blue-500">+ New Post</Link>
       <ul className="mt-4 space-y-2">
         {posts.map((post) => (
           <li key={post.id} className="border p-2 rounded">
