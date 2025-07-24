@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import api from '../api/base';
 function SignUp({ onSwitch }) {
   // Include all fields your backend requires
   const [username, setUsername] = useState('');
@@ -42,8 +42,8 @@ function SignUp({ onSwitch }) {
         formData.append('profile_picture', profilePicture);
       }
 
-      const response = await axios.post(
-        'http://localhost:8000/api/users/register/',
+      const response = await api.post(
+        'users/register/',
         formData,
         {
           headers: {
@@ -70,7 +70,7 @@ function SignUp({ onSwitch }) {
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
 
-        <div>
+        <div className="form-group">
           <label>Username:</label><br />
           <input
             type="text"
@@ -81,7 +81,7 @@ function SignUp({ onSwitch }) {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label>Email:</label><br />
           <input
             type="email"
@@ -92,7 +92,7 @@ function SignUp({ onSwitch }) {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label>Bio:</label><br />
           <textarea
             value={bio}
@@ -101,7 +101,7 @@ function SignUp({ onSwitch }) {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label>Gender:</label><br />
           <select
             value={gender}
@@ -115,7 +115,7 @@ function SignUp({ onSwitch }) {
           </select>
         </div>
 
-        <div>
+        <div className="form-group">
           <label>Profile Picture:</label><br />
           <input
             type="file"
@@ -124,7 +124,7 @@ function SignUp({ onSwitch }) {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label>Password:</label><br />
           <input
             type="password"
@@ -135,7 +135,7 @@ function SignUp({ onSwitch }) {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label>Confirm Password:</label><br />
           <input
             type="password"

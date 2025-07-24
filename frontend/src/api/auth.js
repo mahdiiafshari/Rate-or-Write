@@ -9,9 +9,3 @@ export const loginUser = async (email, password) => {
   return response.data;
 };
 
-export const refreshToken = async (refresh) => {
-  const response = await api.post(`$/token/refresh/`, {
-    refresh,
-  });
-  return response.data.access;
-};

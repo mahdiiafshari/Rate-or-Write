@@ -1,55 +1,61 @@
 import React, { useState } from 'react';
 import { loginUser } from '../api/auth';
 
-const SignIn = ({onSwitch}) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+const SignIn = ({ onSwitch }) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const data = await loginUser(username, password);
-      localStorage.setItem('access', data.access);
-      localStorage.setItem('refresh', data.refresh);
-      alert('Login successful!');
-    } catch (err) {
-      setError('Invalid credentials');
-    }
-  };
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const data = await loginUser(username, password);
+            localStorage.setItem('access', data.access);
+            localStorage.setItem('refresh', data.refresh);
+            alert('Login successful!');
+        } catch (err) {
+            setError('Invalid credentials');
+        }
+    };
 
-  return (
-    <>
-    <form onSubmit={handleLogin}>
-      <h2>Sign In</h2>
-      <input
-        type="text"
-        placeholder="username"
-        value={username}
-        required
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <br />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        required
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br />
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button type="submit">Login</button>
+    return (
+        <div>
+            <form onSubmit={handleLogin}>
+                <h2>Sign In</h2>
 
-    </form>
-        <p>
-        Creat new account?{' '}
-        <button onClick={onSwitch}>Sign Up</button>
-      </p>
-    </>
+                <div className="form-group">
+                    <label>Username</label>
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        required
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </div>
 
+                <div className="form-group">
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        required
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
 
-  );
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+
+                <button className='login-btn' type="submit">Login</button>
+            </form>
+
+            <p>
+                Create new account?{' '}
+                <button className='login-btn' onClick={onSwitch}>Sign Up</button>
+            </p>
+        </div>
+    );
 };
 
 export default SignIn;
