@@ -7,7 +7,7 @@ export default function PostForm() {
   const [formData, setFormData] = useState({
     title: '',
     post: '',
-    category_id: '', // assuming you use category_id as FK
+    category_id: '',
     status: 'draft',
   });
   const [categories, setCategories] = useState([]); // NEW
@@ -18,7 +18,6 @@ export default function PostForm() {
       try {
         const res = await getCategories();
         setCategories(res.data)
-        console.log(res.data);
       } catch (err) {
         console.error('Failed to load categories', err);
       }

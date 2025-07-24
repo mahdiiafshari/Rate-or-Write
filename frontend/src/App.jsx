@@ -4,8 +4,10 @@ import AuthPage  from './pages/AuthPage';
 import PostList from './components/PostList';
 import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
-import Home from './pages/index.jsx';
 import Header from './components/Header';
+import Profile from './components/profile';
+
+
 function App() {
   return(
   <Router>
@@ -15,6 +17,7 @@ function App() {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/create-post" element={<PostForm />} />
         <Route path="/:id" element={<PostDetail />} />
+        <Route path="/profile" element={<Profile />}/>
       </Routes>
     </Router>);
 }

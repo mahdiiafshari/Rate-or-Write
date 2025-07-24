@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { loginUser } from '../api/auth';
+import React, {useState} from 'react';
+import {loginUser} from '../api/auth';
+import {useNavigate} from "react-router-dom";
 
-const SignIn = ({ onSwitch }) => {
+const SignIn = ({onSwitch}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -13,6 +15,9 @@ const SignIn = ({ onSwitch }) => {
             localStorage.setItem('access', data.access);
             localStorage.setItem('refresh', data.refresh);
             alert('Login successful!');
+            setTimeout(() => {
+                navigate('/');
+            }, 1000);
         } catch (err) {
             setError('Invalid credentials');
         }
@@ -45,7 +50,7 @@ const SignIn = ({ onSwitch }) => {
                     />
                 </div>
 
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p style={{color: 'red'}}>{error}</p>}
 
                 <button className='login-btn' type="submit">Login</button>
             </form>

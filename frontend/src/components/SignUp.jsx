@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import api from '../api/base';
+import { useNavigate } from 'react-router-dom';
+
+
 function SignUp({ onSwitch }) {
   // Include all fields your backend requires
   const [username, setUsername] = useState('');
@@ -13,6 +15,7 @@ function SignUp({ onSwitch }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
   // Handle file input change
   const handleFileChange = (e) => {
@@ -54,6 +57,9 @@ function SignUp({ onSwitch }) {
 
       console.log('Registration success:', response.data);
       setSuccess('Account created successfully! You can now sign in.');
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
     } catch (err) {
       // Check if server sent validation errors
       if (err.response && err.response.data) {
