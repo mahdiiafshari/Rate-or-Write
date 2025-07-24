@@ -1,4 +1,3 @@
-import axios from 'axios';
-const CATEGORY_URL = 'http://localhost:8000/api/posts/categories/';
+import api from './base';
 
-export const getCategories = () => axios.get(CATEGORY_URL);
+export const getCategories = () => api.get('categories/');

@@ -8,6 +8,6 @@ urlpatterns = [
     path('categories/', CategoryListCreateView.as_view(), name='category-list-create'),
     path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
     path('', PostListCreateView.as_view(), name='post-list-create'),
-    path('/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
+    path('<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('/' , include(router.urls)),
 ]

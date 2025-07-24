@@ -127,9 +127,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.CustomUser'
 
 #Cors setting
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 #JWT authentication
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),

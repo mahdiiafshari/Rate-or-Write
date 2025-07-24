@@ -1,19 +1,9 @@
-import axios from 'axios';
+import api from './base';
 
-const BASE_URL = 'http://localhost:8000/api/posts/';
-const token = localStorage.getItem('access');
-
-export const fetchPosts = () => axios.get(BASE_URL);
-export const fetchPost = (id) => axios.get(`${BASE_URL}${id}/`);
+export const fetchPosts = () => api.get('posts/');
+export const fetchPost = (id) => api.get(`posts/${id}/`);
 export const createPost = (data) => {
-  const token = localStorage.getItem('access');
-
-  return axios.post('http://localhost:8000/api/posts/', data, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token ? `Bearer ${token}` : undefined,
-    }
-  });
+  return api.post('posts/', data)
 };
-export const updatePost = (id, data) => axios.put(`${BASE_URL}${id}/`, data);
-export const deletePost = (id) => axios.delete(`${BASE_URL}${id}/`);
+export const updatePost = (id, data) => api.put(`posts/${id}/`, data);
+export const deletePost = (id) => api.delete(`posts/${id}/`);

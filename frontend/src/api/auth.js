@@ -1,9 +1,8 @@
-import axios from 'axios';
+import api from './base';
 
-const API_URL = 'http://localhost:8000/api';
 
 export const loginUser = async (email, password) => {
-  const response = await axios.post(`${API_URL}/token/`, {
+  const response = await api.post(`/token/`, {
     username: email,
     password: password,
   });
@@ -11,7 +10,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const refreshToken = async (refresh) => {
-  const response = await axios.post(`${API_URL}/token/refresh/`, {
+  const response = await api.post(`$/token/refresh/`, {
     refresh,
   });
   return response.data.access;
