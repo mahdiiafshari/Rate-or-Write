@@ -1,20 +1,33 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {logoutUser} from "../api/logout.js";
 
 
 function Header() {
     const token = localStorage.getItem('access');
+    const refresh = localStorage.getItem('refresh');
+    const navigate = useNavigate();
+    const handleLogout = async () => {
+        await logoutUser();
+        navigate('/');
+    };
+
 
     return (
         <header className="navbar">
             <nav>
-                <Link to="/">Home</Link>
-                <Link to="/create-post">Create Post</Link>
+                <Link className='btn-shared' to="/">Home</Link>
+                <Link className='btn-shared' to="/create-post">Create Post</Link>
 
                 {token ? (
-                    <Link to="/profile">Profile</Link>
+                    <>
+                        <Link className='btn-shared' to="/profile">Profile</Link>
+                        <button className='btn-shared' onClick={handleLogout} style={{marginLeft: '10px'}}>
+                            Logout
+                        </button>
+                    </>
                 ) : (
-                    <Link to="/login">Login</Link>
+                    <Link className='btn-shared' to="/login">Login</Link>
                 )}
             </nav>
         </header>
