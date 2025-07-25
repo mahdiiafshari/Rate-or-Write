@@ -7,3 +7,4 @@ export const createPost = (data) => {
 };
 export const updatePost = (id, data) => api.put(`posts/${id}/`, data);
 export const deletePost = (id) => api.delete(`posts/${id}/`);
+export const likePost = (id) => api.post(`posts/study-post-likes/${id}/toggle-like/`);

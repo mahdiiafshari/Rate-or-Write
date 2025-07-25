@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-'rest_framework_simplejwt.token_blacklist',
+    'rest_framework_simplejwt.token_blacklist',
+    'django_extensions',
     'corsheaders',
     'django_filters',
     'rest_framework',
@@ -124,14 +125,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#add custom user
+# add custom user
 AUTH_USER_MODEL = 'users.CustomUser'
 
-#Cors setting
+# Cors setting
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-"http://localhost:5174"
+    "http://localhost:5174"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -142,7 +143,7 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'Authorization',
     'Content-Type',
 ]
-#JWT authentication
+# JWT authentication
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -153,5 +154,5 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
