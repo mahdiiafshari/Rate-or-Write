@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthentic
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Category, Post, PostLike
-from .serializers import CategorySerializer, PostSerializer, LikedPostSerializer
+from .serializers import CategorySerializer, PostSerializer, LikedPostSerializer, UserPostSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -89,3 +89,14 @@ class PostLikeViewSet(viewsets.ModelViewSet):
         else:
             PostLike.objects.create(user=user, post=post)
             return Response({"detail": "Post liked."}, status=status.HTTP_201_CREATED)
+
+
+class MyPostsListView(generics.ListAPIView):
+    """
+    API view to retrieve posts created by the currently authenticated user.
+    """
+    serializer_class = UserPostSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user, is_deleted=False).order_by('-created_at')

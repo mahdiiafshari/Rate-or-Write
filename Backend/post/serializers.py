@@ -40,3 +40,10 @@ class LikedPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostLike
         fields = ['id', 'post', 'created_at']
+
+
+class UserPostSerializer(serializers.ModelSerializer):
+    """serializer for specific user posts"""
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'post', 'status', 'category', 'created_at', 'updated_at']

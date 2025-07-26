@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .models import Competition, Competitor
@@ -28,12 +29,9 @@ class CompetitionListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        # Optionally filter by status or other query params
-        queryset = super().get_queryset()
-        status = self.request.query_params.get('status', None)
-        if status:
-            queryset = queryset.filter(status=status.upper())
-        return queryset
+        return Competition.objects.annotate(
+            competitor_count=Count('competitors')
+        )
 
 class CompetitorRegisterView(generics.CreateAPIView):
     """
@@ -53,6 +51,6 @@ class CompetitorRegisterView(generics.CreateAPIView):
             raise ValidationError("You are already registered for this competition.")
         # Ensure the post belongs to the user
         post = serializer.validated_data['post']
-        if post.user != self.request.user:
+        if post.author != self.request.user:
             raise PermissionDenied("You can only register with your own post.")
         serializer.save(user=self.request.user)

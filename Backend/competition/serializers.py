@@ -2,17 +2,13 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import Competitor ,Competition
 
-class CompetitionSerializer(serializers.ModelSerializer):
 
+class CompetitionSerializer(serializers.ModelSerializer):
+    competitor_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Competition
-        fields = ['id', 'name','status' , 'is_public' , 'bio' , 'category']
-        read_only_fields = ['created_at', 'updated_at']
-
-    def get_competitor_count(self, obj):
-        return obj.competitor_count()
-
+        fields = ['id', 'name', 'status', 'is_public', 'bio', 'category', 'competitor_count']
 
 
 class UserSerializer(serializers.ModelSerializer):
