@@ -4,8 +4,6 @@ from .models import Competitor ,Competition
 
 
 class CompetitionSerializer(serializers.ModelSerializer):
-    competitor_count = serializers.IntegerField(read_only=True)
-
     class Meta:
         model = Competition
         fields = ['id', 'name', 'status', 'is_public', 'bio', 'category', 'competitor_count']

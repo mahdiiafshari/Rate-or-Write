@@ -28,11 +28,6 @@ class CompetitionListView(generics.ListAPIView):
     serializer_class = CompetitionSerializer
     permission_classes = [permissions.AllowAny]
 
-    def get_queryset(self):
-        return Competition.objects.annotate(
-            competitor_count=Count('competitors')
-        )
-
 class CompetitorRegisterView(generics.CreateAPIView):
     """
     View to register a user for a competition.

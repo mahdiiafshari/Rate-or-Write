@@ -7,8 +7,6 @@ import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
 import Header from './components/Header';
 import Profile from './components/profile';
-import CompetitionRegisterPage from "./pages/CompetitionRegister.jsx";
-
 
 function App() {
     return (
@@ -21,7 +19,6 @@ function App() {
                 <Route path="/create-post" element={<PostForm/>}/>
                 <Route path="/posts/:id" element={<PostDetail/>}/>
                 <Route path="/profile" element={<Profile/>}/>
-                <Route path="/competitions/:id" element={<CompetitionRegisterPage/>}/>
             </Routes>
         </Router>);
 }

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { competitionLists } from '../api/competition';
+import React, {useEffect, useState} from 'react';
+import {competitionLists} from '../api/competition';
 import api from '../api/base';
 
 export default function CompetitionList() {
@@ -8,7 +8,7 @@ export default function CompetitionList() {
     const [error, setError] = useState('');
     const [userPosts, setUserPosts] = useState([]);
 
-    // ✅ Fetch user posts (used for registration)
+    // Fetch user posts (used for registration)
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -21,7 +21,7 @@ export default function CompetitionList() {
         fetchPosts();
     }, []);
 
-    // ✅ Fetch competition list
+    // Fetch competition list
     useEffect(() => {
         competitionLists()
             .then((res) => {
@@ -76,10 +76,22 @@ export default function CompetitionList() {
                                     }
 
                                     try {
-                                        await api.post('/competitions/register/', {
+                                        const res = await api.post('/competitions/register/', {
                                             competition_id: competition.id,
                                             post: postId,
                                         });
+                                        const updatedCompetition = res.data.competition;
+
+                                        // Update specific competition count in state
+                                        setCompetitions(prev =>
+                                            prev.map(c =>
+                                                c.id === updatedCompetition.id ? {
+                                                    ...c,
+                                                    competitor_count: updatedCompetition.competitor_count
+                                                } : c
+                                            )
+                                        );
+
                                         alert('Successfully registered!');
                                     } catch (err) {
                                         alert('Registration failed: ' + (err.response?.data?.detail || err.message));

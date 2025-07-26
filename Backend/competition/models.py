@@ -16,13 +16,17 @@ class Competition(models.Model):
     bio = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    competitor_count = models.PositiveIntegerField(default=0)  # Cached count
+
+
 
 
     class Meta:
         ordering = ['-created_at']
 
-    def competitor_count(self):
-        return self.competitors.count()
+    def update_competitor_count(self):
+        self.competitor_count = self.competitors.count()
+        self.save(update_fields=["competitor_count"])
 
     def __str__(self):
         return self.name
