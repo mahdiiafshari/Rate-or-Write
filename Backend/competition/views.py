@@ -6,6 +6,7 @@ from .serializers import CompetitionSerializer, CompetitorSerializer
 from django.core.exceptions import ValidationError
 from rest_framework.exceptions import PermissionDenied
 
+
 class CompetitionCreateView(generics.CreateAPIView):
     """
     View for admins to create a new competition.
@@ -19,14 +20,21 @@ class CompetitionCreateView(generics.CreateAPIView):
         # Ensure only admins can create, and set default status if needed
         serializer.save()
 
+
 class CompetitionListView(generics.ListAPIView):
     """
-    View to list all competitions.
-    Accessible to all users (authenticated or not).
+        View to list all competitions.
+        Accessible to all users (authenticated or not).
     """
-    queryset = Competition.objects.all()
+    queryset = Competition.objects.all()  # default queryset
     serializer_class = CompetitionSerializer
     permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        return Competition.objects.annotate(
+            competitor_count=Count('competitors')
+        )
+
 
 class CompetitorRegisterView(generics.CreateAPIView):
     """

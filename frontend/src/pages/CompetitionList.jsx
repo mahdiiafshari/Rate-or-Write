@@ -7,8 +7,8 @@ export default function CompetitionList() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [userPosts, setUserPosts] = useState([]);
+    const [submittingId, setSubmittingId] = useState(null);
 
-    // Fetch user posts (used for registration)
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -21,14 +21,13 @@ export default function CompetitionList() {
         fetchPosts();
     }, []);
 
-    // Fetch competition list
     useEffect(() => {
         competitionLists()
-            .then((res) => {
+            .then(res => {
                 setCompetitions(res.data);
                 setLoading(false);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.error(err);
                 setError('Failed to fetch competitions.');
                 setLoading(false);
@@ -46,11 +45,8 @@ export default function CompetitionList() {
                 <p className="text-center text-gray-500">No competitions available.</p>
             ) : (
                 <ul className="space-y-4">
-                    {competitions.map((competition) => (
-                        <li
-                            key={competition.id}
-                            className="p-4 bg-white shadow rounded-lg border border-gray-200"
-                        >
+                    {competitions.map(competition => (
+                        <li key={competition.id} className="p-4 bg-white shadow rounded-lg border border-gray-200">
                             <h2 className="text-xl font-semibold text-blue-700">{competition.name}</h2>
                             <p className="text-sm text-gray-600 mb-2">
                                 Status: <span className="font-medium">{competition.status}</span>
@@ -59,42 +55,34 @@ export default function CompetitionList() {
                                 Visibility: {competition.is_public ? 'Public' : 'Private'}
                             </p>
                             <p className="text-gray-700 mb-2">{competition.bio}</p>
-                            <p className="text-gray-700 mb-2">User Registred:{competition.competitor_count}</p>
+                            <p className="text-gray-700 mb-2">
+                                User Registered: {competition.competitor_count || 0}
+                            </p>
                             <p className="text-sm text-gray-500">
                                 Category: <strong>{competition.category}</strong>
                             </p>
 
-                            {/* ✅ Form to register with one of user's posts */}
                             <form
-                                onSubmit={async (e) => {
+                                onSubmit={async e => {
                                     e.preventDefault();
                                     const postId = e.target.postId.value;
-
                                     if (!postId) {
-                                        alert("Please select a post before registering.");
+                                        alert('Please select a post before registering.');
                                         return;
                                     }
-
+                                    setSubmittingId(competition.id);
                                     try {
                                         const res = await api.post('/competitions/register/', {
                                             competition_id: competition.id,
                                             post: postId,
                                         });
-                                        const updatedCompetition = res.data.competition;
-
-                                        // Update specific competition count in state
-                                        setCompetitions(prev =>
-                                            prev.map(c =>
-                                                c.id === updatedCompetition.id ? {
-                                                    ...c,
-                                                    competitor_count: updatedCompetition.competitor_count
-                                                } : c
-                                            )
-                                        );
-
+                                        const competitionsRes = await competitionLists();  // fetch latest competitions list
+                                        setCompetitions(competitionsRes.data);            // update state with fresh data
                                         alert('Successfully registered!');
                                     } catch (err) {
                                         alert('Registration failed: ' + (err.response?.data?.detail || err.message));
+                                    } finally {
+                                        setSubmittingId(null);
                                     }
                                 }}
                                 className="mt-4"
@@ -106,9 +94,10 @@ export default function CompetitionList() {
                                     name="postId"
                                     id={`post-${competition.id}`}
                                     className="w-full border border-gray-300 rounded p-2 mb-2"
+                                    disabled={submittingId === competition.id}
                                 >
                                     <option value="">-- Choose a post --</option>
-                                    {userPosts.map((post) => (
+                                    {userPosts.map(post => (
                                         <option key={post.id} value={post.id}>
                                             {post.title}
                                         </option>
@@ -116,9 +105,10 @@ export default function CompetitionList() {
                                 </select>
                                 <button
                                     type="submit"
-                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                                    disabled={submittingId === competition.id}
+                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
                                 >
-                                    Register
+                                    {submittingId === competition.id ? 'Registering...' : 'Register'}
                                 </button>
                             </form>
                         </li>
