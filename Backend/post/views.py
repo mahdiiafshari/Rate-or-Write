@@ -1,33 +1,16 @@
 from django.db.models import Count, Exists, OuterRef
-from rest_framework import generics, permissions, viewsets, status
+from rest_framework import generics, permissions, viewsets, status, views
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Category, Post, PostLike
-from .serializers import CategorySerializer, PostSerializer, LikedPostSerializer, UserPostSerializer
+from .models import Category, Post, PostLike, PostCollection
+from .permissions import IsAdminOrReadOnly, IsAuthorOrAdmin
+from .serializers import CategorySerializer, PostSerializer, LikedPostSerializer, UserPostSerializer, \
+    PostCollectionSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-class IsAdminOrReadOnly(permissions.BasePermission):
-    """
-    Custom permission to only allow admins .
-    """
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return request.user and request.user.is_staff
 
-
-class IsAuthorOrAdmin(permissions.BasePermission):
-    """
-    Custom permission to only allow admins and authors .
-    """
-    def has_object_permission(self, request, view, obj):
-        # Allow read access to any authenticated user
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # Allow write access (PUT, PATCH, DELETE) to the author or admin
-        return obj.author == request.user or request.user.is_staff
 
 
 class CategoryListCreateView(generics.ListCreateAPIView):
@@ -100,3 +83,25 @@ class MyPostsListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user, is_deleted=False).order_by('-created_at')
+
+
+class PostCollectionCreateView(views.APIView):
+    """view to create a new post collection"""
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = PostCollectionSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PostCollectionListView(views.APIView):
+    """View to list PostCollections for the authenticated user"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        collections = PostCollection.objects.filter(user=request.user)
+        serializer = PostCollectionSerializer(collections, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

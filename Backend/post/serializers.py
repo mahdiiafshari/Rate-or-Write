@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Post, PostLike
+from .models import Category, Post, PostLike, PostCollection
 from users.models import CustomUser
 from drf_spectacular.utils import extend_schema_field
 
@@ -47,3 +47,19 @@ class UserPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'title', 'post', 'status', 'category', 'created_at', 'updated_at']
+
+
+class PostCollectionSerializer(serializers.ModelSerializer):
+    posts = PostSerializer(many=True)
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = PostCollection
+        fields = ['id', 'title', 'user', 'posts', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+
+    def create(self, validated_data):
+        posts_data = validated_data.pop('posts')
+        collection = PostCollection.objects.create(**validated_data)
+        collection.posts.set(posts_data)
+        return collection
