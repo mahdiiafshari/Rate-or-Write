@@ -49,3 +49,21 @@ class PostLike(models.Model):
 
     def __str__(self):
         return f"{self.user} liked {self.post}"
+
+
+class PostCollection(models.Model):
+    title = models.CharField(max_length=200)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='collections')
+    posts = models.ManyToManyField(Post, related_name='collections')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        # Assuming uniqueness for user and title combination
+        unique_together = ('user', 'title')
+        verbose_name = 'Post Collection'
+        verbose_name_plural = 'Post Collections'
+
+    def __str__(self):
+        return f"{self.title} by {self.user}
+
