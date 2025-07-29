@@ -50,16 +50,13 @@ class UserPostSerializer(serializers.ModelSerializer):
 
 
 class PostCollectionSerializer(serializers.ModelSerializer):
-    posts = PostSerializer(many=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
         model = PostCollection
-        fields = ['id', 'title', 'user', 'posts', 'created_at', 'updated_at']
+        fields = ['id', 'title', 'user', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']
 
     def create(self, validated_data):
-        posts_data = validated_data.pop('posts')
         collection = PostCollection.objects.create(**validated_data)
-        collection.posts.set(posts_data)
         return collection

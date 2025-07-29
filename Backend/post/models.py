@@ -65,5 +65,5 @@ class PostCollection(models.Model):
         verbose_name_plural = 'Post Collections'
 
     def __str__(self):
-        return f"{self.title} by {self.user}
+        return f"{self.title} by {self.user}"
 

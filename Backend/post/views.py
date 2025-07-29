@@ -1,8 +1,11 @@
 from django.db.models import Count, Exists, OuterRef
 from rest_framework import generics, permissions, viewsets, status, views
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.views import APIView
+
 from .models import Category, Post, PostLike, PostCollection
 from .permissions import IsAdminOrReadOnly, IsAuthorOrAdmin
 from .serializers import CategorySerializer, PostSerializer, LikedPostSerializer, UserPostSerializer, \
@@ -105,3 +108,19 @@ class PostCollectionListView(views.APIView):
         collections = PostCollection.objects.filter(user=request.user)
         serializer = PostCollectionSerializer(collections, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AddPostToCollectionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        collection = get_object_or_404(PostCollection, id=pk, user=request.user)
+        post_id = request.data.get('post_id')
+
+        if not post_id:
+            return Response({'error': 'post_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        post = get_object_or_404(Post, id=post_id)
+        collection.posts.add(post)
+
+        return Response({'status': 'Post added'}, status=status.HTTP_200_OK)

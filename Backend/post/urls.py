@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import CategoryListCreateView, CategoryDetailView, PostListCreateView, PostDetailView, PostLikeViewSet, \
-    MyPostsListView, PostCollectionCreateView, PostCollectionListView
+    MyPostsListView, PostCollectionCreateView, PostCollectionListView, AddPostToCollectionView
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -14,4 +14,6 @@ urlpatterns = [
     path('mine/', MyPostsListView.as_view(), name='my-posts'),
     path('collections/create/', PostCollectionCreateView.as_view(), name='collection-create'),
     path('collections/', PostCollectionListView.as_view(), name='collection-list'),
+    path("collections/<int:pk>/add/", AddPostToCollectionView.as_view(), name="collection-add-post"),
+
 ]
