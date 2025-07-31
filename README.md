@@ -1,55 +1,44 @@
+📚 Rate-or-Write
+Rate-or-Write is a modern full-stack web application enabling users to rate and write reviews on various content. Built with Django REST Framework for the backend and React for the frontend, this project showcases robust software engineering practices, including API design, authentication, and modular architecture.
 
-```markdown
-# 📚 Rate-or-Write
+🚀 Features
 
-**Rate-or-Write** is a modern full-stack web application that allows users to **rate** and **write reviews** on various content. Built using Django REST Framework on the backend and React on the frontend, this project demonstrates strong software engineering practices in API design, authentication, and modular architecture.
+🔐 User Authentication: Secure registration, login, and logout using JWT.
+👤 Profile Management: Custom user model for personalized profiles.
+📝 Content Interaction: Create, rate, like, and collect posts.
+🏆 Competition Module: Gamified elements to engage users.
+🧾 Admin Panel: Permission-based access control for administrators.
+📦 RESTful API: Supports filtering, throttling, and pagination.
 
----
 
-## 🚀 Features
+🧰 Tech Stack
+Backend – Django REST Framework
 
-- 🔐 User authentication with JWT (register, login, logout)
-- 👤 Profile management with custom user model
-- 📝 Post creation, rating, liking, and collections
-- 🏆 Competition module with gamification elements
-- 🧾 Admin panel with permission-based access control
-- 📦 RESTful API with filtering, throttling, and pagination
+Python: 3.11
+Django: 5.2.4
+Django REST Framework (DRF):
+API views: APIView, ModelViewSet, CreateAPIView, etc.
+JWT authentication via djangorestframework-simplejwt with token rotation, blacklisting, and refresh tokens.
+Rate throttling with AnonRateThrottle.
+Filtering using django-filter.
 
----
 
-## 🧰 Tech Stack
+CORS Management: Handled by django-cors-headers.
+Database: SQLite (default, easily swappable).
+Containerization: Docker for reproducible deployment.
+Additional Features: Modular settings, custom CustomUser model, internationalization, middleware, and admin customization.
 
-### Backend – Django REST Framework
+Frontend – React
 
-- **Python 3.11**
-- **Django 5.2.4**
-  - Modular settings & custom `CustomUser` model
-  - Internationalization, middleware, and admin customization
-- **DRF (Django REST Framework)**
-  - API views: `APIView`, `ModelViewSet`, `CreateAPIView`, etc.
-  - JWT authentication using `djangorestframework-simplejwt`
-  - Token rotation, blacklisting, and refresh tokens
-  - Rate throttling (`AnonRateThrottle`)
-  - Filtering with `django-filter`
-- **CORS Management**: via `django-cors-headers`
-- **Database**: Default `SQLite` (easily swappable)
-- **Containerization**: `Dockerfile` for reproducible deployment
+React: Utilizes Hooks (useState, useEffect, etc.).
+JavaScript: ES6+ for modern, clean, and readable code.
+HTTP Client: Axios or Fetch for backend communication.
+JWT Storage: Managed via localStorage or secure cookies.
+React Router: Enables client-side navigation.
+CSS3/HTML5: Semantic and responsive layouts.
 
-### Frontend – React
 
-- **React (with Hooks)**: `useState`, `useEffect`, etc.
-- **JavaScript (ES6+)**: Modern, clean, readable code
-- **Axios** (or Fetch): HTTP communication with backend
-- **JWT storage**: Using `localStorage` or secure cookies
-- **React Router**: Client-side navigation
-- **CSS3 / HTML5**: Semantic and responsive layout
-
----
-
-## 📁 Folder Structure
-
-```
-
+📁 Folder Structure
 Rate-or-Write/
 ├── Backend/
 │   ├── manage.py
@@ -63,61 +52,39 @@ Rate-or-Write/
 │   │   └── App.js
 │   └── package.json
 
-````
 
----
+⚙️ Getting Started
+🔧 Prerequisites
 
-## ⚙️ Getting Started
+Python: 3.11+
+Node.js + npm: Required for frontend.
+Docker: Optional but recommended for containerized setup.
 
-### 🔧 Prerequisites
-
-- Python 3.11+
-- Node.js + npm (for frontend)
-- Docker (optional but recommended)
-
-### 🐳 Docker Setup (Recommended)
-
-```bash
+🐳 Docker Setup (Recommended)
 git clone https://github.com/mahdiiafshari/Rate-or-Write.git
 cd Rate-or-Write/Backend
 docker build -t rate-or-write-backend .
 docker run -p 8000:8000 rate-or-write-backend
-````
 
-### 🧪 Manual Backend Setup
-
-```bash
+🧪 Manual Backend Setup
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
-```
-
----
-
-## 🔐 Authentication Flow
-
-* User signs up → receives JWT (access + refresh)
-* Tokens are stored in frontend (via cookies or `localStorage`)
-* On expiration, refresh token is used to renew access
-* Backend uses DRF `permissions` and `throttling` for control
-
----
 
 
-## 🤝 Contributing
+🔐 Authentication Flow
 
-Feel free to fork the repo and submit PRs or open issues for suggestions and bug reports.
-
----
-
-## 🪪 License
-
-This project is open-source and available under the [MIT License](LICENSE).
-
----
-
-## 👤 Author
-
-Developed by [**mahdiiafshari**](https://github.com/mahdiiafshari)
+Sign-Up: Users register and receive JWT (access + refresh tokens).
+Token Storage: Tokens are stored in the frontend (cookies or localStorage).
+Token Refresh: On access token expiration, the refresh token renews it.
+Access Control: Backend enforces DRF permissions and throttling.
 
 
+🤝 Contributing
+Contributions are welcome! Fork the repository, submit pull requests, or open issues for suggestions and bug reports.
+
+🪪 License
+This project is open-source and licensed under the MIT License.
+
+👤 Author
+Developed by mahdiiafshari.
