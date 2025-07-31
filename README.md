@@ -47,7 +47,7 @@ Rate-or-Write/
 ├── Backend/
 │   ├── manage.py
 │   ├── settings/
-│   └── apps/ (users, posts, competition, etc.)
+│   └── apps/ (users, posts, competition.)
 ├── Frontend/
 │   ├── src/
 │   │   ├── components/
