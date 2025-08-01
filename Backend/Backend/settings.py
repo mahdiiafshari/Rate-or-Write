@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'users',  # Custom user app
     'post',
-    'competition'
+    'competition',
+    'group'
 ]
 
 MIDDLEWARE = [
