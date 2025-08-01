@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getGroups } from '../api/groups';
+import { Link } from 'react-router-dom';
 
 const GroupList = () => {
   const [groups, setGroups] = useState([]);
@@ -28,7 +29,10 @@ const GroupList = () => {
         <ul>
           {groups.map(group => (
             <li key={group.id}>
-              <strong>{group.name}</strong> <br />
+              <Link to={`/groups/${group.id}`}>
+                <strong>{group.name}</strong>
+              </Link>
+              <br />
               Members: {group.users.length}
             </li>
           ))}

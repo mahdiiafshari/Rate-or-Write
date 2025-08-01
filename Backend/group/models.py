@@ -6,6 +6,7 @@ User = get_user_model()
 
 class GroupModel(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_groups')
     users = models.ManyToManyField(User, related_name='joined_groups')
     posts = models.ManyToManyField(Post, through='GroupPostShare', related_name='shared_to_groups')
     created_at = models.DateTimeField(auto_now_add=True)

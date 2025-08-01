@@ -7,7 +7,8 @@ import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
 import Header from './components/Header';
 import Profile from './components/profile';
-import Groups from "./pages/Groups.jsx";
+import Groups from "./components/grouplist.jsx";
+import Groupdetail from "./components/groupdetail.jsx";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/posts/:id" element={<PostDetail/>}/>
                 <Route path="/profile" element={<Profile/>}/>
                 <Route path="/groups" element={<Groups/>}/>
+                <Route path="/groups/:groupId" element={<Groupdetail />} />
             </Routes>
         </Router>);
 }

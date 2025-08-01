@@ -1,27 +1,20 @@
 from django.contrib import admin
-from .models import GroupModel, GroupPostShare
 from django import forms
 from django.contrib.auth import get_user_model
+from .models import GroupModel, GroupPostShare
 from post.models import Post
 
 User = get_user_model()
 
 class GroupModelForm(forms.ModelForm):
-    class Meta:
-        model = GroupModel
-        fields = ['name', 'users']
-
     users = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
         widget=admin.widgets.FilteredSelectMultiple("Users", is_stacked=False)
     )
 
-@admin.register(GroupModel)
-class GroupModelAdmin(admin.ModelAdmin):
-    form = GroupModelForm
-    list_display = ['name',  'created_at']
-    filter_horizontal = ['users']
-    search_fields = ['name',]
+    class Meta:
+        model = GroupModel
+        fields = ['name', 'users']
 
 class GroupPostShareInline(admin.TabularInline):
     model = GroupPostShare
@@ -29,6 +22,19 @@ class GroupPostShareInline(admin.TabularInline):
     autocomplete_fields = ['post', 'shared_by']
     readonly_fields = ['shared_at']
 
+@admin.register(GroupModel)
+class GroupModelAdmin(admin.ModelAdmin):
+    form = GroupModelForm
+    list_display = ['name', 'created_by', 'created_at']
+    filter_horizontal = ['users']
+    search_fields = ['name', 'created_by__username']
+    inlines = [GroupPostShareInline]
+
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            obj.created_by = request.user
+        super().save_model(request, obj, form, change)
 
 @admin.register(GroupPostShare)
 class GroupPostShareAdmin(admin.ModelAdmin):
