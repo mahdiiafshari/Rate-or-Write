@@ -4,6 +4,7 @@ from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import GroupModel, GroupPostShare
+from .permissions import IsGroupOwner
 from .serializers import (
     GroupSerializer, GroupCreateSerializer, AddMemberSerializer,
     SharePostSerializer, PostSerializer
@@ -22,6 +23,23 @@ class GroupCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+
+class GroupDeleteView(generics.DestroyAPIView):
+    """
+    Deletes a single group by its ID only if the requesting user is the group's creator.
+    """
+    queryset = GroupModel.objects.all()
+    serializer_class = GroupSerializer
+    lookup_field = 'id'
+    permission_classes = [permissions.IsAuthenticated, IsGroupOwner]
+
+    def get_object(self):
+        """
+        Fetch the group instance and enforce object-level permission (ownership).
+        """
+        obj = super().get_object()
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 class GroupListView(generics.ListAPIView):
     serializer_class = GroupSerializer

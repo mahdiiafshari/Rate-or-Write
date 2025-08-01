@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPosts, likePost } from '../api/posts';
-import { getCollections, createCollection, addToCollection } from '../api/postCollections';
+import { getCollections, createCollection, addToCollection } from '../api/postCollections.js';
 
 export default function PostList() {
   const [posts, setPosts] = useState([]);
