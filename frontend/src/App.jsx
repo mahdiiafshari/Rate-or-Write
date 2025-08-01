@@ -7,6 +7,7 @@ import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
 import Header from './components/Header';
 import Profile from './components/profile';
+import Groups from "./pages/Groups.jsx";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/create-post" element={<PostForm/>}/>
                 <Route path="/posts/:id" element={<PostDetail/>}/>
                 <Route path="/profile" element={<Profile/>}/>
+                <Route path="/groups" element={<Groups/>}/>
             </Routes>
         </Router>);
 }
