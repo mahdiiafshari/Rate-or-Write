@@ -20,9 +20,6 @@ class GroupCreateView(generics.CreateAPIView):
     serializer_class = GroupCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
-
 
 class GroupDeleteView(generics.DestroyAPIView):
     """

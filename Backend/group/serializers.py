@@ -31,10 +31,16 @@ class GroupCreateSerializer(serializers.ModelSerializer):
         model = GroupModel
         fields = ['name']
 
+    def validate(self, attrs):
+        user = self.context['request'].user
+        if GroupModel.objects.filter(created_by=user).count() >= 5:
+            raise serializers.ValidationError("You can create up to 5 groups only.")
+        return attrs
+
     def create(self, validated_data):
         user = self.context['request'].user
-        group = GroupModel.objects.create(created_by=user, name=validated_data['name'])
-        group.users.add(user)  # Creator joins automatically
+        group = GroupModel.objects.create(created_by=user, **validated_data)
+        group.users.add(user)  # Add creator as a member
         return group
 
 
