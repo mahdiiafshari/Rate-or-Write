@@ -9,19 +9,36 @@ const SignIn = ({onSwitch}) => {
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-            const data = await loginUser(username, password);
-            localStorage.setItem('access', data.access);
-            localStorage.setItem('refresh', data.refresh);
-            alert('Login successful!');
-            setTimeout(() => {
-                navigate('/');
-            }, 1000);
-        } catch (err) {
-            setError('Invalid credentials');
-        }
-    };
+    e.preventDefault();
+    try {
+        const data = await loginUser(username, password);
+        localStorage.setItem('access', data.access);
+        localStorage.setItem('refresh', data.refresh);
+
+        // Fetch current user info
+        const res = await fetch('http://localhost:8000/api/users/auth/me/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${data.access}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch user");
+
+        const userData = await res.json();
+        localStorage.setItem('user', JSON.stringify(userData));
+
+        alert('Login successful!');
+        setTimeout(() => {
+            navigate('/');
+        }, 1000);
+    } catch (err) {
+        console.error(err);
+        setError('Invalid credentials');
+    }
+};
+
 
     return (
         <div>

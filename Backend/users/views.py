@@ -75,6 +75,25 @@ class LogoutView(APIView):
             return Response({'detail': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        user = request.user
+        return Response({
+            "id": user.id,
+            "username": user.username,
+
+        })
+
+
+class ListUsersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Only return users who are NOT staff
+        users = User.objects.filter(is_staff=False)
+        serializer = CustomUserSerializer(users, many=True)
+        return Response(serializer.data)
 
 

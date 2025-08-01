@@ -1,5 +1,5 @@
 # views.py
-
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -47,19 +47,24 @@ class GroupListView(generics.ListAPIView):
 
 
 class AddMemberToGroupView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsGroupOwner]
 
     def post(self, request, group_id):
         serializer = AddMemberSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        group = GroupModel.objects.get(id=group_id)
+        group = get_object_or_404(GroupModel, id=group_id)
+        self.check_object_permissions(request, group)
+        user = get_object_or_404(User, id=serializer.validated_data['user_id'])
+        # check if user is group subscriber
+        if group.users.filter(id=user.id).exists():
+            return Response(
+                {"detail": "User is already a member of this group."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        if request.user != group.created_by:
-            return Response({"detail": "Only group creator can add users."}, status=403)
-
-        user = User.objects.get(id=serializer.validated_data['user_id'])
         group.users.add(user)
-        return Response({"detail": "User added to group"})
+        return Response({"detail": "User added to group"}, status=status.HTTP_200_OK)
+
 
 
 class SharePostToGroupView(APIView):
