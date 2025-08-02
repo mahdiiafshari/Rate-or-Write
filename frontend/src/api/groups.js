@@ -7,3 +7,5 @@ export const createGroup = (data) => {return api.post('/groups/create/', data);}
 export const addMemberToGroup = (groupId, data) => {
   return api.post(`/groups/${groupId}/add-member/`, data);
 };
+export const sharePostToGroup = (groupId, postId) =>
+  api.post(`/groups/${groupId}/share-post/`, { post_id: postId });
