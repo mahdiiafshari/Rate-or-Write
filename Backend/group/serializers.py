@@ -44,7 +44,7 @@ class GroupCreateSerializer(serializers.ModelSerializer):
         return group
 
 
-class AddMemberSerializer(serializers.Serializer):
+class MemberSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
 
     def validate_user_id(self, value):

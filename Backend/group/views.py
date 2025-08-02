@@ -1,13 +1,12 @@
-# views.py
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import GroupModel, GroupPostShare
-from .permissions import IsGroupOwner
+from .permissions import IsGroupOwner, NotGroupOwner
 from .serializers import (
-    GroupSerializer, GroupCreateSerializer, AddMemberSerializer,
-    SharePostSerializer, PostSerializer
+    GroupSerializer, GroupCreateSerializer,
+    SharePostSerializer, PostSerializer, MemberSerializer
 )
 from post.models import Post
 from django.contrib.auth import get_user_model
@@ -50,7 +49,7 @@ class AddMemberToGroupView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsGroupOwner]
 
     def post(self, request, group_id):
-        serializer = AddMemberSerializer(data=request.data)
+        serializer = MemberSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         group = get_object_or_404(GroupModel, id=group_id)
         self.check_object_permissions(request, group)
@@ -84,6 +83,7 @@ class SharePostToGroupView(APIView):
 
 
 class GroupPostsListView(generics.ListAPIView):
+    """view to show list of post to specific group"""
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -92,3 +92,32 @@ class GroupPostsListView(generics.ListAPIView):
         if self.request.user not in group.users.all():
             return Post.objects.none()  # or raise PermissionDenied
         return group.posts.all()
+
+
+class LeftGroupView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, group_id):
+        group = get_object_or_404(GroupModel, id=group_id)
+
+        # Check if user is a member
+        if not group.users.filter(id=request.user.id).exists():
+            return Response(
+                {"detail": "You are not a member of this group"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Prevent creator from leaving
+        if group.created_by == request.user:
+            return Response(
+                {"detail": "You are the creator and cannot leave the group. Transfer ownership or delete the group."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Remove user from group
+        group.users.remove(request.user)
+
+        return Response(
+            {"detail": "You have left the group"},
+            status=status.HTTP_200_OK
+        )
