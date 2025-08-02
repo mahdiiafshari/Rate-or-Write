@@ -9,3 +9,4 @@ export const addMemberToGroup = (groupId, data) => {
 };
 export const sharePostToGroup = (groupId, postId) =>
   api.post(`/groups/${groupId}/share-post/`, { post_id: postId });
+export const leftFRomGroup = (groupId) => api.post(`/groups/${groupId}/left-group/`);
