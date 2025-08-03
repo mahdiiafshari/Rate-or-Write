@@ -9,6 +9,7 @@
 - 🔐 **User Authentication**: Secure registration, login, and logout using JWT.
 - 👤 **Profile Management**: Custom user model for personalized profiles.
 - 📝 **Content Interaction**: Create, rate, like, and collect posts.
+- 👥 **Group Creation & Collaboration**: Users can create groups, invite members, and share posts within the group.
 - 🏆 **Competition Module**: Gamified elements to engage users.
 - 🧾 **Admin Panel**: Permission-based access control for administrators.
 - 📦 **RESTful API**: Supports filtering, throttling, and pagination.
