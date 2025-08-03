@@ -12,6 +12,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     """Serializer for Post model, including like and category data."""
     author = serializers.StringRelatedField(read_only=True)  # Display author's string representation
+    author_id = serializers.IntegerField(source='author.id', read_only=True)  # new line
     category = serializers.StringRelatedField(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), source='category', write_only=True
@@ -21,8 +22,8 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'author', 'title', 'post', 'category', 'category_id', 'status', 'like_count', 'is_liked']
-        read_only_fields = ['author', 'like_count', 'is_liked']
+        fields = ['id', 'author','author_id', 'title', 'post', 'category', 'category_id', 'status', 'like_count', 'is_liked']
+        read_only_fields = ['author', 'author_id' , 'like_count', 'is_liked']
 
     def get_like_count(self, obj):
         return obj.likes.count()

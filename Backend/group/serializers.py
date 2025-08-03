@@ -11,12 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username']
 
 
-class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
-        fields = ['id', 'post']
-
-
 class GroupSerializer(serializers.ModelSerializer):
     users = UserSerializer(many=True, read_only=True)
     created_by = UserSerializer(read_only=True)

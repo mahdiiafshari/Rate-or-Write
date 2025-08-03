@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {useParams, Link, useNavigate} from 'react-router-dom';
-import {getGroupPosts, getGroups, deleteGroup, leftFRomGroup} from '../api/groups';
-import {addMemberToGroup} from '../api/groups';
-import {getAllUsers} from '../api/users';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { getGroupPosts, getGroups, deleteGroup, leftFRomGroup, addMemberToGroup } from '../api/groups';
+import { getAllUsers, getUserById } from '../api/users'; // you'll need an API for this
+import UserProfileModal from '../components/UserProfileModal';
 
 const Groupdetail = () => {
-    const {groupId} = useParams();
+    const { groupId } = useParams();
     const navigate = useNavigate();
     const [group, setGroup] = useState(null);
     const [posts, setPosts] = useState([]);
@@ -14,12 +14,12 @@ const Groupdetail = () => {
     const [deleting, setDeleting] = useState(false);
     const [showAddUser, setShowAddUser] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState('');
+    const [selectedUserProfile, setSelectedUserProfile] = useState(null);
 
     const handleLeaveGroup = async () => {
         if (!window.confirm("Are you sure you want to leave this group?")) return;
-
         try {
-            await leftFRomGroup(groupId);  // Await the API call properly
+            await leftFRomGroup(groupId);
             alert("You have left the group");
             navigate("/groups");
         } catch (err) {
@@ -70,12 +70,21 @@ const Groupdetail = () => {
 
     const handleAddMember = async () => {
         try {
-            await addMemberToGroup(groupId, {user_id: selectedUserId});
+            await addMemberToGroup(groupId, { user_id: selectedUserId });
             alert("User added!");
             setShowAddUser(false);
         } catch (err) {
             alert("Failed to add member");
             console.error(err);
+        }
+    };
+
+    const openUserProfile = async (userId) => {
+        try {
+            const res = await getUserById(userId); // API to fetch a single user
+            setSelectedUserProfile(res.data);
+        } catch (err) {
+            console.error("Failed to fetch user profile", err);
         }
     };
 
@@ -91,26 +100,35 @@ const Groupdetail = () => {
             <h2>{group.name}</h2>
             <p>Total members: {group.users.length}</p>
 
+            <h4>Members:</h4>
+            <ul>
+                {group.users.map(user => (
+                    <li key={`user-${user.id}`} style={{ cursor: "pointer", color: "blue" }} onClick={() => openUserProfile(user.id)}>
+                        {user.username}
+                    </li>
+                ))}
+            </ul>
+
             {isOwner && (
                 <>
                     <button onClick={handleDelete} disabled={deleting}
-                            style={{background: 'red', color: 'white', marginRight: '1rem'}}>
+                        style={{ background: 'red', color: 'white', marginRight: '1rem' }}>
                         {deleting ? 'Deleting...' : 'Delete Group'}
                     </button>
 
-                    <button onClick={openAddMember} style={{background: 'green', color: 'white'}}>
+                    <button onClick={openAddMember} style={{ background: 'green', color: 'white' }}>
                         Add Member
                     </button>
                 </>
             )}
             {isMember && !isOwner && (
-                <button onClick={handleLeaveGroup} style={{background: 'orange', color: 'white', marginTop: '1rem'}}>
+                <button onClick={handleLeaveGroup} style={{ background: 'orange', color: 'white', marginTop: '1rem' }}>
                     Leave Group
                 </button>
             )}
 
             {showAddUser && (
-                <div style={{border: '1px solid #ccc', padding: '1rem', marginTop: '1rem'}}>
+                <div style={{ border: '1px solid #ccc', padding: '1rem', marginTop: '1rem' }}>
                     <h4>Select a user to add:</h4>
                     <select value={selectedUserId} onChange={(e) => setSelectedUserId(e.target.value)}>
                         <option value="">-- Select User --</option>
@@ -120,9 +138,9 @@ const Groupdetail = () => {
                             </option>
                         ))}
                     </select>
-                    <br/><br/>
+                    <br /><br />
                     <button onClick={handleAddMember}>Add</button>
-                    <button onClick={() => setShowAddUser(false)} style={{marginLeft: '1rem'}}>Cancel</button>
+                    <button onClick={() => setShowAddUser(false)} style={{ marginLeft: '1rem' }}>Cancel</button>
                 </div>
             )}
 
@@ -131,11 +149,18 @@ const Groupdetail = () => {
                 <p>No posts shared to this group yet.</p>
             ) : (
                 <ul>
-                    {posts.map(post => (
-                        <li key={post.id}>{post.post}</li>
-                    ))}
+                    {posts.map(((post,index) => (
+                        <li key={`post-${groupId}-${post.id}-${index}`}>
+                            {post.post} by{" "}
+                            <span style={{ color: "blue", cursor: "pointer" }} onClick={() => openUserProfile(post.author_id)}>
+                                {post.author}
+                            </span>
+                        </li>
+                    )))}
                 </ul>
             )}
+
+            <UserProfileModal user={selectedUserProfile} onClose={() => setSelectedUserProfile(null)} />
         </div>
     );
 };

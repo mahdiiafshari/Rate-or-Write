@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from .views import UserProfileView, RegisterUserView, LoginView, LogoutView, CurrentUserView, ListUsersView
+from .views import UserProfileView, RegisterUserView, LoginView, LogoutView, CurrentUserView, ListUsersView, \
+    GlobalUserProfileView
 
 router = DefaultRouter()
 
@@ -11,4 +12,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('auth/me/', CurrentUserView.as_view(), name='current_user'),
     path('' , ListUsersView.as_view(), name='user_list'),
+    path('<int:id>/', GlobalUserProfileView.as_view(), name='user_profile'),
 ]

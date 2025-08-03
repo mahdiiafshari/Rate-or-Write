@@ -97,3 +97,12 @@ class ListUsersView(APIView):
         return Response(serializer.data)
 
 
+class GlobalUserProfileView(generics.RetrieveAPIView):
+    """view to show each user profile"""
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'id'
+
+
+

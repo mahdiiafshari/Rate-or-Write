@@ -6,8 +6,9 @@ from .models import GroupModel, GroupPostShare
 from .permissions import IsGroupOwner, NotGroupOwner
 from .serializers import (
     GroupSerializer, GroupCreateSerializer,
-    SharePostSerializer, PostSerializer, MemberSerializer
+    SharePostSerializer, MemberSerializer
 )
+from post.serializers import PostSerializer
 from post.models import Post
 from django.contrib.auth import get_user_model
 
