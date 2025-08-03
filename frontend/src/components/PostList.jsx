@@ -2,7 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {fetchPosts, likePost} from '../api/posts';
 import {getCollections, createCollection, addToCollection} from '../api/postCollections';
 import {getGroups, sharePostToGroup} from '../api/groups';
+
 import { v4 as uuidv4 } from 'uuid';
+import {getUserById} from "../api/users.js";
+import UserProfileModal from "./UserProfileModal.jsx";
 export default function PostList() {
     const [posts, setPosts] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -10,6 +13,7 @@ export default function PostList() {
     const [newCollectionTitle, setNewCollectionTitle] = useState('');
     const [addingPostIds, setAddingPostIds] = useState({});
     const [sharingPostIds, setSharingPostIds] = useState({});
+    const [selectedUserProfile, setSelectedUserProfile] = useState(null);
 
     useEffect(() => {
         loadData();
@@ -77,6 +81,14 @@ export default function PostList() {
             setSharingPostIds((prev) => ({...prev, [postId]: false}));
         }
     };
+    const openUserProfile = async (userId) => {
+        try {
+            const res = await getUserById(userId); // API to fetch a single user
+            setSelectedUserProfile(res.data);
+        } catch (err) {
+            console.error("Failed to fetch user profile", err);
+        }
+    };
 
     return (
         <div className="p-6 max-w-3xl mx-auto">
@@ -106,7 +118,7 @@ export default function PostList() {
                 >
                     <h2 className="text-xl font-semibold">{post.title}</h2>
                     <p className="text-gray-800">{post.post}</p>
-                    <p className="text-sm text-gray-500">By: {post.author}</p>
+                    <p style={{ color: "blue", cursor: "pointer" }}  onClick={() => openUserProfile(post.author_id)}>By: {post.author}</p>
                     <p className="text-sm text-gray-500">Category: {post.category}</p>
                     <p className="text-sm">{post.like_count} Likes</p>
 
@@ -157,6 +169,7 @@ export default function PostList() {
                     </div>
                 </div>
             ))}
+            <UserProfileModal user={selectedUserProfile} onClose={() => setSelectedUserProfile(null)} />
         </div>
     );
 }
