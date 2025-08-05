@@ -9,11 +9,21 @@
 - 🔐 **User Authentication**: Secure registration, login, and logout using JWT.
 - 👤 **Profile Management**: Custom user model for personalized profiles.
 - 📝 **Content Interaction**: Create, rate, like, and collect posts.
-- 👥 **Group Creation & Collaboration**: Users can create groups, invite members, and share posts within the group.
+- 👥 **Group Creation & Collaboration**:
+  - Create and manage groups with a limit of 5 groups per user.
+  - Invite members and assign roles: **Banned**, **Normal**, **Admin**, or **Owner**.
+  - Role-based permissions:
+    - **Owners**: Can delete groups, add/remove members, and change any member's role (including other owners).
+    - **Admins**: Can add/remove members and change roles for non-owners.
+    - **Normal**: Can view and share posts within the group.
+    - **Banned**: Restricted from viewing or sharing posts.
+  - Share posts within groups for collaborative interaction.
 - 🏆 **Competition Module**: Gamified elements to engage users.
-- 🧾 **Admin Panel**: Permission-based access control for administrators.
+- 🧾 **Admin Panel**:
+  - Permission-based access control for administrators.
+  - Manage groups, memberships, and post shares.
+  - Assign and modify user roles (Banned, Normal, Admin, Owner) within groups via an intuitive inline interface.
 - 📦 **RESTful API**: Supports filtering, throttling, and pagination.
-
 ---
 
 ## 🧰 Tech Stack
