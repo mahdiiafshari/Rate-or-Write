@@ -82,7 +82,7 @@ const GroupList = () => {
                 <strong>{group.name}</strong>
               </Link>
               <br />
-              Members: {group.users.length}
+              Members: {group.memberships.length}
             </li>
           ))}
         </ul>

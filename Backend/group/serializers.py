@@ -27,7 +27,7 @@ class GroupMembershipSerializer(serializers.ModelSerializer):
         return value
 
 class GroupSerializer(serializers.ModelSerializer):
-    memberships = GroupMembershipSerializer(many=True, read_only=True, source='memberships')
+    memberships = GroupMembershipSerializer(many=True, read_only=True)
     created_by = UserSerializer(read_only=True)
 
     class Meta:
