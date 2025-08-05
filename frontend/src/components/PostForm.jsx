@@ -40,19 +40,19 @@ export default function PostForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 space-y-4">
-      <h2 className="text-xl font-semibold">Create Post</h2>
-      <input name="title" placeholder="Title" value={formData.title} onChange={handleChange} className="border p-2 w-full" required />
-      <textarea name="post" placeholder="Content" value={formData.post} onChange={handleChange} className="border p-2 w-full" required />
+    <form onSubmit={handleSubmit} className="form-group">
+      <h2 >Create Post</h2>
+      <input name="title" placeholder="Title" value={formData.title} onChange={handleChange}  required />
+      <textarea name="post" placeholder="Content" value={formData.post} onChange={handleChange} required />
 
-      <select name="category_id" value={formData.category_id} onChange={handleChange} className="border p-2 w-full" required>
+      <select name="category_id" value={formData.category_id} onChange={handleChange}  required>
         <option value="">Select category</option>
         {categories.map(cat => (
           <option key={cat.id} value={cat.id}>{cat.name}</option>
         ))}
       </select>
 
-      <select name="status" value={formData.status} onChange={handleChange} className="border p-2 w-full">
+      <select name="status" value={formData.status} onChange={handleChange} className="select">
         <option value="draft">Draft</option>
         <option value="published">Published</option>
       </select>

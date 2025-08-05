@@ -95,17 +95,15 @@ export default function PostList() {
             <h1 className="text-2xl font-bold mb-4">Posts</h1>
 
             {/* Create playlist */}
-            <form onSubmit={handleCreateCollection} className="mb-6 flex gap-2">
+            <form onSubmit={handleCreateCollection} className="form-group">
                 <input
                     type="text"
                     value={newCollectionTitle}
                     onChange={(e) => setNewCollectionTitle(e.target.value)}
                     placeholder="New Playlist Name"
-                    className="border rounded px-3 py-2 w-full"
                 />
                 <button
                     type="submit"
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
                 >
                     ➕ Create Playlist
                 </button>
@@ -121,23 +119,23 @@ export default function PostList() {
                     <p style={{ color: "blue", cursor: "pointer" }}  onClick={() => openUserProfile(post.author_id)}>By: {post.author}</p>
                     <p className="text-sm text-gray-500">Category: {post.category}</p>
                     <p className="text-sm">{post.like_count} Likes</p>
-
-                    <div className="flex gap-2 items-center">
-                        {/* Like button */}
+                    {/* Like button */}
                         <button
-                            className="bg-green-500 text-white px-3 py-1 rounded"
+                            className="like-button"
                             onClick={() => handleLike(post.id)}
                         >
                             {post.is_liked ? 'Unlike' : 'Like'}
                         </button>
 
+                    <div className="flex gap-2 items-center">
+
+
                         {/* Add to Playlist */}
-                        <select
+                        <select className= "select"
                             key={post.id + (addingPostIds[post.id] ? '-loading' : '')}
                             defaultValue=""
                             disabled={!!addingPostIds[post.id]}
                             onChange={(e) => handleAddToCollection(post.id, e.target.value)}
-                            className="border px-2 py-1 rounded"
                         >
                             <option value="" disabled>
                                 {addingPostIds[post.id] ? 'Adding...' : 'Add to Playlist'}

@@ -61,7 +61,7 @@ function Profile() {
       <h2>User Profile</h2>
       <p><strong>Username:</strong> {profile.username}</p>
       <p><strong>Email:</strong> {profile.email}</p>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <form onSubmit={handleSubmit} className="form-group">
         <input
           type="text"
           name="first_name"
@@ -87,7 +87,7 @@ function Profile() {
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
-        <button type="submit" disabled={saving}>
+        <button className="some-button" type="submit" disabled={saving}>
           {saving ? 'Saving...' : 'Update Profile'}
         </button>
       </form>
