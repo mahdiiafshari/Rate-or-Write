@@ -1,48 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { fetchUserStats } from "../api/users.js";
 
 const UserProfileModal = ({ user, onClose }) => {
-    if (!user) return null;
+  const [selectedUser, setSelectedUser] = useState(null);
 
-    return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
-                <h2>{user.username}'s Profile</h2>
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>Joined:</strong> {new Date(user.date_joined).toLocaleDateString()}</p>
-                <p><strong>Bio:</strong> {user.bio || "No bio provided"}</p>
-                <button onClick={onClose} style={styles.closeBtn}>Close</button>
-            </div>
-        </div>
-    );
-};
-
-const styles = {
-    overlay: {
-        position: "fixed",
-        top: 0, left: 0, right: 0, bottom: 0,
-        background: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    modal: {
-        background: "rgba(172, 0, 0, 0.5)",
-        padding: "2rem",
-        borderRadius: "8px",
-        width: "400px",
-        maxHeight: "80%",
-        overflowY: "auto",
-        boxShadow: "0px 0px 10px rgba(0,0,0,0.3)"
-    },
-    closeBtn: {
-        marginTop: "1rem",
-        padding: "0.5rem 1rem",
-        background: "#007bff",
-        color: "#fff",
-        border: "none",
-        borderRadius: "4px",
-        cursor: "pointer"
+  useEffect(() => {
+    if (user) {
+      const loadStats = async () => {
+        try {
+          const stats = await fetchUserStats(user.id);
+          setSelectedUser({ ...user, ...stats });
+        } catch (err) {
+          console.error("Failed to load user stats", err);
+          setSelectedUser(user);
+        }
+      };
+      loadStats();
     }
+  }, [user]);
+
+  if (!selectedUser) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2>{selectedUser.username}'s Profile</h2>
+        <p><strong>Email:</strong> {selectedUser.email}</p>
+        <p><strong>Joined:</strong> {new Date(selectedUser.date_joined).toLocaleDateString()}</p>
+        <p><strong>Bio:</strong> {selectedUser.bio || "No bio provided"}</p>
+        <p><strong>Followers:</strong> {selectedUser.follower_count || 0}</p>
+        <p><strong>Following:</strong> {selectedUser.following_count || 0}</p>
+        <button className="modal-close-btn" onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
 };
 
 export default UserProfileModal;

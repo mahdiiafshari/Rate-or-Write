@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {fetchPosts, likePost} from '../api/posts';
 import {getCollections, createCollection, addToCollection} from '../api/postCollections';
 import {getGroups, sharePostToGroup} from '../api/groups';
-
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {getUserById} from "../api/users.js";
 import UserProfileModal from "./UserProfileModal.jsx";
+
 export default function PostList() {
     const [posts, setPosts] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -14,6 +14,8 @@ export default function PostList() {
     const [addingPostIds, setAddingPostIds] = useState({});
     const [sharingPostIds, setSharingPostIds] = useState({});
     const [selectedUserProfile, setSelectedUserProfile] = useState(null);
+    const openModal = (user) => setSelectedUserProfile(user);
+    const closeModal = () => setSelectedUserProfile(null);
 
     useEffect(() => {
         loadData();
@@ -111,31 +113,31 @@ export default function PostList() {
 
             {posts.map((post) => (
                 <div
-                    key={post.id}
+                    key={uuidv4()}
                     className="border p-4 mb-4 rounded shadow-md bg-white space-y-2"
                 >
                     <h2 className="text-xl font-semibold">{post.title}</h2>
                     <p className="text-gray-800">{post.post}</p>
-                    <p style={{ color: "blue", cursor: "pointer" }}  onClick={() => openUserProfile(post.author_id)}>By: {post.author}</p>
+                    <span onClick={() => openModal(post.author_id)}>By: {post.author}</span>
                     <p className="text-sm text-gray-500">Category: {post.category}</p>
                     <p className="text-sm">{post.like_count} Likes</p>
                     {/* Like button */}
-                        <button
-                            className="like-button"
-                            onClick={() => handleLike(post.id)}
-                        >
-                            {post.is_liked ? 'Unlike' : 'Like'}
-                        </button>
+                    <button
+                        className="like-button"
+                        onClick={() => handleLike(post.id)}
+                    >
+                        {post.is_liked ? 'Unlike' : 'Like'}
+                    </button>
 
                     <div className="flex gap-2 items-center">
 
 
                         {/* Add to Playlist */}
-                        <select className= "select"
-                            key={post.id + (addingPostIds[post.id] ? '-loading' : '')}
-                            defaultValue=""
-                            disabled={!!addingPostIds[post.id]}
-                            onChange={(e) => handleAddToCollection(post.id, e.target.value)}
+                        <select className="select"
+                                key={uuidv4()}
+                                defaultValue=""
+                                disabled={!!addingPostIds[post.id]}
+                                onChange={(e) => handleAddToCollection(post.id, e.target.value)}
                         >
                             <option value="" disabled>
                                 {addingPostIds[post.id] ? 'Adding...' : 'Add to Playlist'}
@@ -165,9 +167,11 @@ export default function PostList() {
                             ))}
                         </select>
                     </div>
+                    {selectedUserProfile && (
+                        <UserProfileModal user={selectedUserProfile} onClose={closeModal}/>
+                    )}
                 </div>
             ))}
-            <UserProfileModal user={selectedUserProfile} onClose={() => setSelectedUserProfile(null)} />
         </div>
     );
 }

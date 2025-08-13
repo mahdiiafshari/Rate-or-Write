@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { getAllUsers, followUser, unfollowUser } from '../api/users.js';
+import {getAllUsers, followUser, unfollowUser, getUserById} from '../api/users.js';
+import UserProfileModal from "./UserProfileModal.jsx";
 
 const UserList = ({ currentUserId }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [selectedUserProfile, setSelectedUserProfile] = useState(null);
+  const openUserProfile = async (userId) => {
+        try {
+            const res = await getUserById(userId); // API to fetch a single user
+            setSelectedUserProfile(res.data);
+        } catch (err) {
+            console.error("Failed to fetch user profile", err);
+        }
+    };
   // Load all users on mount
   useEffect(() => {
     fetchUsers();
@@ -59,7 +68,7 @@ const UserList = ({ currentUserId }) => {
             borderBottom: '1px solid #ccc',
           }}
         >
-          <span>{user.username}</span>
+          <span onClick={() => openUserProfile(user.id)}>{user.username}</span>
           {user.id !== currentUserId && (
             user.is_following ? (
               <button
@@ -79,6 +88,7 @@ const UserList = ({ currentUserId }) => {
           )}
         </div>
       ))}
+      <UserProfileModal user={selectedUserProfile} onClose={() => setSelectedUserProfile(null)} />
     </div>
   );
 };

@@ -54,7 +54,6 @@ const GroupList = () => {
     <div className="group-list">
       <h2>Your Groups</h2>
 
-      {/* Show group creation form only if user has < 5 groups */}
       {groups.length < 5 && (
         <div style={{ marginBottom: '1rem' }}>
           <input

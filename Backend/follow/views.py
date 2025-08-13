@@ -32,15 +32,16 @@ class FollowViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(following, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['GET'])
-    def stats(self, request, pk=None):
-        user = get_object_or_404(User, pk=pk)
+    @action(detail=False, methods=['GET'], url_path='stats')
+    def stats(self, request):
+        user_id = request.query_params.get('user_id')
+        user = get_object_or_404(User, pk=user_id)
         data = {
             'user': user,
             'follower_count': user.follower_relationships.count(),
             'following_count': user.following_relationships.count(),
             'is_following': request.user.is_authenticated and
-                          Follow.objects.filter(follower=request.user, following=user).exists()
+                            Follow.objects.filter(follower=request.user, following=user).exists()
         }
         serializer = FollowStatsSerializer(data)
         return Response(serializer.data)
