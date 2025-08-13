@@ -3,6 +3,8 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 
+from follow.models import Follow
+
 User = get_user_model()
 
 class RegisterUserSerializer(serializers.ModelSerializer):
@@ -26,25 +28,31 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
 class CustomUserSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
+    is_following = serializers.SerializerMethodField()
+    follow_id = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = [
-            'id',
-            'username',
-            'email',
-            'first_name',
-            'last_name',
-            'full_name',
-            'bio',
-            'profile_picture',
-            'gender',
-            'date_joined',
+            'id', 'username', 'email', 'first_name', 'last_name',
+            'full_name', 'bio', 'profile_picture', 'gender', 'date_joined',
+            'is_following', 'follow_id'
         ]
-        read_only_fields = ['id', 'username', 'email', 'date_joined', 'full_name']
+        read_only_fields = ['id', 'username', 'email', 'date_joined', 'full_name', 'is_following', 'follow_id']
 
     def get_full_name(self, obj):
         return obj.get_full_name()
+
+    def get_is_following(self, obj):
+        request_user = self.context['request'].user
+        return Follow.objects.filter(follower=request_user, following=obj).exists()
+
+    def get_follow_id(self, obj):
+        request_user = self.context['request'].user
+        follow = Follow.objects.filter(follower=request_user, following=obj).first()
+        return follow.id if follow else None
+
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()

@@ -91,10 +91,10 @@ class ListUsersView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Only return users who are NOT staff
-        users = User.objects.filter(is_staff=False)
-        serializer = CustomUserSerializer(users, many=True)
+        users = User.objects.filter(is_staff=False).exclude(id=request.user.id)
+        serializer = CustomUserSerializer(users, many=True, context={'request': request})
         return Response(serializer.data)
+
 
 
 class GlobalUserProfileView(generics.RetrieveAPIView):

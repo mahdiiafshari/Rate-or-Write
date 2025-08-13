@@ -5,7 +5,6 @@ import {logoutUser} from "../api/logout.js";
 
 function Header() {
     const token = localStorage.getItem('access');
-    const refresh = localStorage.getItem('refresh');
     const navigate = useNavigate();
     const handleLogout = async () => {
         await logoutUser();
@@ -20,6 +19,7 @@ function Header() {
                 <Link className='btn-shared' to="/create-post">Create Post</Link>
                 <Link className='btn-shared' to="/competition">Competition List</Link>
                 <Link className='btn-shared' to="/groups">Groups</Link>
+                <Link className='btn-shared' to="/follow">Follow</Link>
                 {token ? (
                     <>
                         <Link className='btn-shared' to="/profile">Profile</Link>

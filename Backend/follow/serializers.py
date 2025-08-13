@@ -13,11 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
 class FollowSerializer(serializers.ModelSerializer):
     follower = UserSerializer(read_only=True)
     following = UserSerializer(read_only=True)
-    follower_id = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        source='follower',
-        write_only=True
-    )
     following_id = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
         source='following',
@@ -26,11 +21,12 @@ class FollowSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Follow
-        fields = ['id', 'follower', 'following', 'follower_id', 'following_id', 'created_at']
+        fields = ['id', 'follower', 'following', 'following_id', 'created_at']
         read_only_fields = ['id', 'created_at']
 
     def validate(self, data):
-        if data['follower'] == data['following']:
+        request_user = self.context['request'].user
+        if request_user == data['following']:
             raise serializers.ValidationError("You cannot follow yourself.")
         return data
 
