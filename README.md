@@ -7,8 +7,10 @@
 ## 🚀 Features
 
 - 🔐 **User Authentication**: Secure registration, login, and logout using JWT.
-- 👤 **Profile Management**: Custom user model for personalized profiles.
-- 📝 **Content Interaction**: Create, rate, like, and collect posts.
+- 👤 **Profile Management & Social Interaction**: 
+    - Custom user model for personalized profiles.
+    - Follow / Unfollow System: Users can follow other users to keep track of their activity.
+- 📝 **Content Interaction**: Create, rate, like, and collect posts collection .
 - 👥 **Group Creation & Collaboration**:
   - Create and manage groups with a limit of 5 groups per user.
   - Invite members and assign roles: **Banned**, **Normal**, **Admin**, or **Owner**.
