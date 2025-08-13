@@ -25,3 +25,11 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.get_full_name() or self.username
+
+    @property
+    def followers(self):
+        return CustomUser.objects.filter(follower_relationships__following=self)
+
+    @property
+    def following(self):
+        return CustomUser.objects.filter(following_relationships__follower=self)

@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'users',  # Custom user app
     'post',
     'competition',
-    'group'
+    'group',
+    'follow'
 ]
 
 MIDDLEWARE = [
