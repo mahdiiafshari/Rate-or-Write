@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from .models import Follow
-from .serializers import FollowSerializer, FollowStatsSerializer
+from .serializers import FollowSerializer, FollowStatsSerializer, UserSerializer
 
 User = get_user_model()
 
@@ -45,3 +45,22 @@ class FollowViewSet(viewsets.ModelViewSet):
         }
         serializer = FollowStatsSerializer(data)
         return Response(serializer.data)
+
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    @action(detail=True, methods=['get'])
+    def followers(self, request, pk=None):
+        """List users who follow this user."""
+        user = self.get_object()
+        followers = User.objects.filter(following_relationships__following=user)
+        return Response(UserSerializer(followers, many=True).data)
+
+    @action(detail=True, methods=['get'])
+    def following(self, request, pk=None):
+        """List users this user is following."""
+        user = self.get_object()
+        following = User.objects.filter(follower_relationships__follower=user)
+        return Response(UserSerializer(following, many=True).data)

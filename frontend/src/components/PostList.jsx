@@ -83,14 +83,6 @@ export default function PostList() {
             setSharingPostIds((prev) => ({...prev, [postId]: false}));
         }
     };
-    const openUserProfile = async (userId) => {
-        try {
-            const res = await getUserById(userId); // API to fetch a single user
-            setSelectedUserProfile(res.data);
-        } catch (err) {
-            console.error("Failed to fetch user profile", err);
-        }
-    };
 
     return (
         <div className="p-6 max-w-3xl mx-auto">
