@@ -8,8 +8,15 @@ export const followUser = (userId) => api.post('/follows/', { following_id: user
 export const unfollowUser = (followId) => api.delete(`/follows/${followId}/`);
 // Fetch follow stat
 export const fetchUserStats = async (userId) => {
-  const res = await api.get(`/follows/stats/`, {
-    params: { user_id: userId },
-  });
+  const res = await api.get(`/follows/stats/?user_id=${userId}`);
   return res.data;
+};
+export const fetchUserFollowers = async (userId) => {
+  const { data } = await api.get(`/follows/users/${userId}/followers/`);
+  return data;
+};
+
+export const fetchUserFollowing = async (userId) => {
+  const { data } = await api.get(`/follows/users/${userId}/following/`);
+  return data;
 };

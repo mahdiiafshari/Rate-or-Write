@@ -31,7 +31,8 @@ class FollowSerializer(serializers.ModelSerializer):
         return data
 
 class FollowStatsSerializer(serializers.Serializer):
-    user = UserSerializer()
+    id = serializers.IntegerField()
+    username = serializers.CharField()
     follower_count = serializers.IntegerField()
     following_count = serializers.IntegerField()
     is_following = serializers.BooleanField()

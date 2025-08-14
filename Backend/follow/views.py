@@ -35,15 +35,19 @@ class FollowViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['GET'], url_path='stats')
     def stats(self, request):
         user_id = request.query_params.get('user_id')
+        if not user_id:
+            return Response({"detail": "user_id query parameter is required."}, status=400)
+
         user = get_object_or_404(User, pk=user_id)
         data = {
-            'user': user,
+            'id': user.id,
+            'username': user.username,
             'follower_count': user.follower_relationships.count(),
             'following_count': user.following_relationships.count(),
-            'is_following': request.user.is_authenticated and
-                            Follow.objects.filter(follower=request.user, following=user).exists()
+            'is_following': Follow.objects.filter(follower=request.user, following=user).exists()
         }
-        serializer = FollowStatsSerializer(data)
+        serializer = FollowStatsSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
 
 
